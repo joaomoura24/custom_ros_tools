@@ -15,8 +15,12 @@ _error_handler_type = Optional[
 
 class ToggleService(rospy.Service):
 
-    def __init__(self, name: str, enable_handler: Callable[..., bool], disable_handler: Callable[..., bool],
-                 buff_size: Optional[int] = DEFAULT_BUFF_SIZE, error_handler: _error_handler_type = None):
+    def __init__(self,
+                 name: str,
+                 enable_handler: Callable[..., bool],
+                 disable_handler: Callable[..., bool],
+                 buff_size: Optional[int] = DEFAULT_BUFF_SIZE,
+                 error_handler: _error_handler_type = None):
         super(ToggleService, self).__init__(name, SetBool, self.toggle,
                                             buff_size=buff_size, error_handler=error_handler)
         self.enable_handler = enable_handler
