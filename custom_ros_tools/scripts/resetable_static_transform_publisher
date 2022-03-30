@@ -36,7 +36,7 @@ class Node(TfInterface):
         duration = rospy.Duration(1.0/float(rospy.get_param('~hz', 100)))
         rospy.Timer(duration, self.main_loop)
 
-    def reset(self, req: SetTransformRequest) -> SetTransformResponse:
+    def reset(self, req):
         success = True
         message = 'reset tf, new tf is '
         try:
