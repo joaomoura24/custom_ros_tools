@@ -40,7 +40,7 @@ class TfInterface:
         try:
             msg = self.tf_buffer.lookup_transform(parent_frame_id, child_frame_id, rospy.Time())
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            rospy.logdebug(f'Did not recieve the frame {child_frame_id} in {parent_frame_id}!')
+            rospy.logwarn(f'Did not recieve the frame {child_frame_id} in {parent_frame_id}!')
         return msg
 
     def get_tf(self, parent_frame_id: str, child_frame_id: str) -> Tuple[ArrayLike]:
