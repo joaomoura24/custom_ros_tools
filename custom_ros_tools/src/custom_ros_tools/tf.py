@@ -93,7 +93,7 @@ class TfInterface:
     def msg_to_matrix(msg: TransformStamped) -> ArrayLike:
         p = TfInterface.msg_to_pos(msg)
         q = TfInterface.msg_to_quat(msg)
-        return TfInterface.pos_and_quat_to_matrix(p, q)
+        return TfInterface.pos_quat_to_matrix(p, q)
 
     @staticmethod
     def pos_quat_to_matrix(pos: ArrayLike, quat: Optional[ArrayLike] = [0,0,0,1]) -> ArrayLike:
