@@ -37,7 +37,7 @@ class ToggleService(rospy.Service):
 def get_srv_handler(
         srv_name: str,
         srv_type: type,
-        presistent: Optional[bool] = False,
+        persistent: Optional[bool] = False,
         headers: Optional[Union[dict, None]] = None) -> rospy.ServiceProxy:
     handler = None
     rospy.wait_for_service(srv_name)
