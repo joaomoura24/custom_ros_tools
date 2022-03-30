@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model
+  href="http://download.ros.org/schema/package_format3.xsd"
+  schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>custom_ros_tools</name>
+  <version>1.0.0</version>
+  <description>The custom_ros_tools package</description>
+  <maintainer email="c.mower@ed.ac.uk">Christopher E. Mower</maintainer>
+  <license>BSD</license>
+  <url type="website">https://github.com/cmower/custom_ros_tools</url>
+  <author email="c.mower@ed.ac.uk">Christopher E. Mower</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>tf2</build_export_depend>
+  <build_export_depend>tf2_ros</build_export_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <depend>std_srvs</depend>
+
+</package>
