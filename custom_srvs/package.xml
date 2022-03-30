@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-model
+  href="http://download.ros.org/schema/package_format3.xsd"
+  schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>custom_srvs</name>
+  <version>1.0.0</version>
+  <description>The custom_srvs package</description>
+  <maintainer email="chris.mower@ed.ac.uk">Christopher E. Mower</maintainer>
+  <license>BSD</license>
+  <url type="website">https://github.com/cmower/custom_ros_tools</url>
+  <author email="chris.mower@ed.ac.uk">Christopher E. Mower</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>geometry_msgs</depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+</package>
