@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+import sys
+import rospy
+import tf_conversions
+from geometry_msgs.msg import TransformStamped
+from custom_srv.srv import SetTransform, SetTransformResponse, SetTransformRequest
+from custom_ros_tools.tf import TfInterface
+
+class Node(TfInterface):
+
+    def __init__(self):
+
+        # Initialize node
+        rospy.init_node('resetable_static_transform_node', anonymous=True)
+        super().__init__()  # initializes tf listener/broadcaster
+
+        # Get transform
+        pos = [float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])]
+
+        args_end = sys.argv[4:]
+        if len(args_end) == 5:
+            quat = tf_conversions.transformations.quaternion_from_euler(float(args_end[0]), float(args_end[1]), float(args_end[2]))
+        elif len(args_end) == 6:
+            quat = [float(args_end[0]), float(args_end[1]), float(args_end[2]), float(args_end[3])]
+        else:
+            raise ValueError("did not recognize input")
+
+        frame_id = args_end[-2]
+        child_frame_id = args_end[-1]
+        self.tf = self.pack_tf_msg(frame_id, child_frame_id, pos, quat)
+
+        # Setup reset service
+        rospy.Service('reset_tf', SetTransform, self.reset)
+
+        # Start main loop
+        duration = rospy.Duration(1.0/float(rospy.get_param('~hz', 100)))
+        rospy.Timer(duration, self.main_loop)
+
+    def reset(self, req: SetTransformRequest) -> SetTransformResponse:
+        success = True
+        message = 'reset tf, new tf is '
+        try:
+            self.tf.transform = req.transform
+            p, q = self.msg_to_pos_quat(self.tf)
+            message += f'pos: {p.tolist()}, quat: {q.tolist()}'
+        except Exception as err:
+            success = False
+            message = 'failed to reset tf:' + str(err)
+
+        if success:
+            rospy.loginfo(message)
+        else:
+            rospy.logerr(message)
+
+        return SetTransformResponse(success=success, message=message)
+
+    def main_loop(self, event):
+        self.tf.header.stamp = rospy.Time.now()
+        self.tf_broadcaster.sendTransform(self.tf)
+
+    def spin(self):
+        rospy.spin()
+
+def main():
+    Node().spin()
+
+if __name__ == '__main__':
+    main()

@@ -17,7 +17,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-# catkin_install_python(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+catkin_install_python(PROGRAMS
+  scripts/resetable_static_transform_publisher
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
