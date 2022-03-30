@@ -71,11 +71,11 @@ class TfInterface:
 
     @staticmethod
     def msg_to_pos(msg: TransformStamped) -> ArrayLike:
-        return np.array([getattr(msg.transform.translation, d) for d in 'xyz'])
+        return np.array([msg.transform.translation.x, msg.transform.translation.y, msg.transform.translation.z])
 
     @staticmethod
     def msg_to_quat(msg: TransformStamped) -> ArrayLike:
-        return np.array([getattr(msg.transform.rotation, d) for d in 'xyzw'])
+        return np.array([msg.transform.rotation.x, msg.transform.rotation.y, msg.transform.rotation.z, msg.transform.rotation.w])
 
     @staticmethod
     def msg_to_eul(msg: TransformStamped) -> ArrayLike:
