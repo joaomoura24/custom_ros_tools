@@ -4,7 +4,7 @@ import tf_conversions
 import numpy as np
 from numpy.typing import ArrayLike
 from geometry_msgs.msg import TransformStamped
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 class TfInterface:
 
@@ -86,7 +86,7 @@ class TfInterface:
         return self.msg_to_pos(msg), self.msg_to_quat(msg)
 
     @staticmethod
-    def msg_to_pos_eul(msg: TransformStamped) -> Tuple[Arraylike]:
+    def msg_to_pos_eul(msg: TransformStamped) -> Tuple[ArrayLike]:
         return self.msg_to_pos(msg), self.msg_to_eul(msg)
 
     @staticmethod

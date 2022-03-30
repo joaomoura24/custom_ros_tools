@@ -1,7 +1,7 @@
 import rospy
 from typing import Callable, Optional, Union
 from types import TracebackType
-from std_srvs.srv import SetBool, SetBoolResponse, SetboolRequest
+from std_srvs.srv import SetBool, SetBoolResponse, SetBoolRequest
 from rospy.impl.tcpros_base import DEFAULT_BUFF_SIZE
 from ik_ros.srv import JointNames, JointNamesResponse
 
@@ -26,7 +26,7 @@ class ToggleService(rospy.Service):
         self.enable_handler = enable_handler
         self.disable_handler = disable_handler
 
-    def toggle(self, req: SetboolRequest) -> SetBoolResponse:
+    def toggle(self, req: SetBoolRequest) -> SetBoolResponse:
         if req.data:
             success, message = self.enable_handler()
         else:
