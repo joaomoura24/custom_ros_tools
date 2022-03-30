@@ -78,8 +78,16 @@ class TfInterface:
         return np.array([getattr(msg.transform.rotation, d) for d in 'xyzw'])
 
     @staticmethod
-    def msg_to_pos_quat(msg: TransformStamped) -> Tuple[Arraylike]:
+    def msg_to_eul(msg: TransformStamped) -> ArrayLike:
+        return np.asarray(tf_conversions.transformations.euler_from_quaternion(TfInterface.msg_to_quat(msg)))
+
+    @staticmethod
+    def msg_to_pos_quat(msg: TransformStamped) -> Tuple[ArrayLike]:
         return self.msg_to_pos(msg), self.msg_to_quat(msg)
+
+    @staticmethod
+    def msg_to_pos_eul(msg: TransformStamped) -> Tuple[Arraylike]:
+        return self.msg_to_pos(msg), self.msg_to_eul(msg)
 
     @staticmethod
     def msg_to_matrix(msg: TransformStamped) -> ArrayLike:
