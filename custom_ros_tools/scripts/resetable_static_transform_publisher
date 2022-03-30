@@ -3,7 +3,7 @@ import sys
 import rospy
 import tf_conversions
 from geometry_msgs.msg import TransformStamped
-from custom_srv.srv import SetTransform, SetTransformResponse, SetTransformRequest
+from custom_srv.srv import SetTransform, SetTransformResponse
 from custom_ros_tools.tf import TfInterface
 
 class Node(TfInterface):
