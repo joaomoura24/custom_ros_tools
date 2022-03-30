@@ -19,7 +19,7 @@ class TfInterface:
                pos: ArrayLike,
                orientation: Optional[ArrayLike] = [0, 0, 0, 1],
                eul_deg: Optional[bool] = False
-               ):
+               ) -> None:
         """Set the position and orientation of a child frame with respect to a parent frame."""
 
         # Handle euler angles
