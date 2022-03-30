@@ -32,3 +32,17 @@ class ToggleService(rospy.Service):
         else:
             success, message = self.disable_handler()
         return SetBoolResponse(success=success, message=message)
+
+
+def get_srv_handler(
+        srv_name: str,
+        srv_type: type,
+        presistent: Optional[bool] = False,
+        headers: Optional[Union[dict, None]] = None) -> rospy.ServiceProxy:
+    handler = None
+    rospy.wait_for_service(srv_name)
+    try:
+        handler = rospy.ServiceProxy(srv_name, srv_type, persistent=persistent, headers=headers)
+    except Exception as err:
+        rospy.logerr(f"failed to retrieve service proxy: {str(err)}")
+    return handler
