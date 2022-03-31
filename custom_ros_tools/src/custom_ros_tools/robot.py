@@ -2,7 +2,7 @@ from typing import List, Optional
 from sensor_msgs.msg import JointState
 
 def resolve_joint_order(msg: JointState, joint_names: List[str]) -> JointState:
-    out = JointState(name=joint_names)
+    out = JointState(header=msg.header, name=joint_names)
     for name in joint_names:
         if name in msg.name:
             idx = msg.name.index(name)
