@@ -9,8 +9,14 @@ class Node:
 
     def __init__(self):
         rospy.init_node('remap_joint_state_to_floatarray_node')
-        config = rospy.get_param('~config')
-        self.joint_names = config['joint_names']
+        config = rospy.get_param('~config', {})
+        self.joint_names = config.get('joint_names', None)
+
+        if self.joint_names is not None:
+            self.get = self._get_resolved_joint_state
+        else:
+            self.get = self._get_joint_state
+
         self.field = config.get('field', 'position')
         self.sub = None
         self.pub = rospy.Publisher('joint_states/floatarray', Float64MultiArray, queue_size=10)
@@ -31,8 +37,14 @@ class Node:
         else:
             return False, "tried to stop remapper but it is not running"
 
+    def _get_joint_state(self, msg):
+        return getattr(msg, self.field)
+
+    def _get_resolved_joint_state(self, msg):
+        return self._get_joint_state(resolve_joint_order(msg, self.joint_names))
+
     def callback(self, msg):
-        self.pub.publish(Float64MultiArray(data=getattr(resolve_joint_order(msg), self.field)))
+        self.pub.publish(Float64MultiArray(data=self.get(msg)))  # note, get method set in init
 
     def spin(self):
         rospy.spin()
