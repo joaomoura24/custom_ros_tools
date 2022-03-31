@@ -63,7 +63,7 @@ class TfInterface:
         return msg
 
     @staticmethod
-    def pack_tf(pos: ArrayLike, rotation: ArrayLike):
+    def pack_tf(pos: ArrayLike, rot: ArrayLike):
         msg = Transform()
         msg.translation.x = pos[0]
         msg.translation.y = pos[1]
