@@ -55,18 +55,23 @@ class TfInterface:
         return pos, orientation
 
     @staticmethod
-    def pack_tf_msg(parent_frame_id: str, child_frame_id: str, pos: ArrayLike, rotation: ArrayLike) -> TransformStamped:
-        msg = TransformStamped()
-        msg.header.stamp = rospy.Time.now()
+    def pack_tf_msg(parent_frame_id: str, child_frame_id: str, pos: ArrayLike, rot: ArrayLike) -> TransformStamped:
+        msg = TransformStamped(transform=TfInterface.pack_tf(pos, rot))
         msg.header.frame_id = parent_frame_id
         msg.child_frame_id = child_frame_id
-        msg.transform.translation.x = pos[0]
-        msg.transform.translation.y = pos[1]
-        msg.transform.translation.z = pos[2]
-        msg.transform.rotation.x = rotation[0]
-        msg.transform.rotation.y = rotation[1]
-        msg.transform.rotation.z = rotation[2]
-        msg.transform.rotation.w = rotation[3]
+        msg.header.stamp = rospy.Time.now()
+        return msg
+
+    @staticmethod
+    def pack_tf(pos: ArrayLike, rotation: ArrayLike):
+        msg = Transform()
+        msg.translation.x = pos[0]
+        msg.translation.y = pos[1]
+        msg.translation.z = pos[2]
+        msg.rotation.x = rot[0]
+        msg.rotation.y = rot[1]
+        msg.rotation.z = rot[2]
+        msg.rotation.w = rot[3]
         return msg
 
     @staticmethod
