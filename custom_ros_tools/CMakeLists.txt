@@ -19,5 +19,6 @@ include_directories(
 
 catkin_install_python(PROGRAMS
   scripts/resetable_static_transform_publisher
+  scripts/remap_joint_state_to_floatarray
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
