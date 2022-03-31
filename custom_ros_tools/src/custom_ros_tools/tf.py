@@ -3,7 +3,7 @@ import tf2_ros
 import tf_conversions
 import numpy as np
 from numpy.typing import ArrayLike
-from geometry_msgs.msg import TransformStamped
+from geometry_msgs.msg import TransformStamped, Transform
 from typing import Optional, Tuple, Union
 
 class TfInterface:
@@ -70,16 +70,28 @@ class TfInterface:
         return msg
 
     @staticmethod
+    def tf_msg_to_pos(msg: Transform) -> ArrayLike:
+        return np.array([msg.translation.x, msg.translation.y, msg.translation.z])
+
+    @staticmethod
     def msg_to_pos(msg: TransformStamped) -> ArrayLike:
-        return np.array([msg.transform.translation.x, msg.transform.translation.y, msg.transform.translation.z])
+        return TfInterface.tf_msg_to_pos(msg.transform)
+
+    @staticmethod
+    def tf_msg_to_quat(msg: Transform) -> ArrayLike:
+        return np.array([msg.rotation.x, msg.rotation.y, msg.rotation.z, msg.rotation.w])
 
     @staticmethod
     def msg_to_quat(msg: TransformStamped) -> ArrayLike:
-        return np.array([msg.transform.rotation.x, msg.transform.rotation.y, msg.transform.rotation.z, msg.transform.rotation.w])
+        return TfInterface.tf_msg_to_quat(msg.transform)
+
+    @staticmethod
+    def tf_msg_to_eul(msg: Transform) -> ArrayLike:
+        return np.asarray(tf_conversions.transformations.euler_from_quaternion(TfInterface.tf_msg_to_quat(msg)))
 
     @staticmethod
     def msg_to_eul(msg: TransformStamped) -> ArrayLike:
-        return np.asarray(tf_conversions.transformations.euler_from_quaternion(TfInterface.msg_to_quat(msg)))
+        return TfInterface.tf_msg_to_eul(msg.transform)
 
     @staticmethod
     def msg_to_pos_quat(msg: TransformStamped) -> Tuple[ArrayLike]:
