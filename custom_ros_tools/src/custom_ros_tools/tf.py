@@ -2,7 +2,10 @@ import rospy
 import tf2_ros
 import tf_conversions
 import numpy as np
-from numpy.typing import ArrayLike
+try:
+    from numpy.typing import ArrayLike
+except ModuleNotFoundError:
+    ArrayLike = np.ndarray
 from geometry_msgs.msg import TransformStamped, Transform
 from typing import Optional, Tuple, Union
 
