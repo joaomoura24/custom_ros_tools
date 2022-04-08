@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sensor_msgs.msg import JointState
 
-def resolve_joint_order(msg: JointState, joint_names: List[str]) -> JointState:
+def resolve_joint_order(msg: JointState, joint_names: List[str], ns: str = '') -> JointState:
 
     # Initialize output joint state message
     out = JointState(header=msg.header, name=joint_names)
@@ -14,6 +14,8 @@ def resolve_joint_order(msg: JointState, joint_names: List[str]) -> JointState:
             # True -> name appears in joint state message
 
             # Get index of name in input joint state message
+            if ns:
+                name = f'{ns}/{name}'
             idx = msg.name.index(name)
 
             # Append position
