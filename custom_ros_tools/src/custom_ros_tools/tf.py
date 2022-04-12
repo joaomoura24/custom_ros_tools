@@ -33,7 +33,7 @@ class TfInterface:
             quat = np.array(orientation)
 
         # Pack transform message and broadcast
-        self.tf_broadcaster.sendTransform(self.pack_tf_msg(parent_frame_id, child_frame_id, pos, orientation))
+        self.tf_broadcaster.sendTransform(self.pack_tf_msg(parent_frame_id, child_frame_id, pos, quat))
 
     def get_tf_msg(self, parent_frame_id: str, child_frame_id: str) -> Union[TransformStamped, None]:
         msg = None
