@@ -117,3 +117,11 @@ class TfInterface:
         T = tf_conversions.transformations.quaternion_matrix(quat)
         T[:3, 3] = pos
         return T
+
+    @staticmethod
+    def tf_msg_to_pos_magnitude(msg: Transform) -> float:
+        return np.linalg.norm(TfInterface.tf_msg_to_pos(msg))
+
+    @staticmethod
+    def msg_to_pos_magnitude(msg: TransformStamped) -> float:
+        return TfInterface.tf_msg_to_pos_magnitude(msg.transform)
