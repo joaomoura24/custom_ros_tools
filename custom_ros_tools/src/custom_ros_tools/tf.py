@@ -35,6 +35,11 @@ class TfInterface:
         # Pack transform message and broadcast
         self.tf_broadcaster.sendTransform(self.pack_tf_msg(parent_frame_id, child_frame_id, pos, quat))
 
+    def set_matrix(self, parent_frame_id: str, child_frame_id: str, T: ArrayLike) -> None:
+        pos = T[:3, 3]
+        quat = tf_conversions.transformations.quaternion_from_matrix(T)
+        self.tf_broadcaster.sendTransform(self.pack_tf_msg(parent_frame_id, child_frame_id, pos, quat))
+
     def get_tf_msg(self, parent_frame_id: str, child_frame_id: str) -> Union[TransformStamped, None]:
         msg = None
         try:
