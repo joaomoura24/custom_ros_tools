@@ -2,7 +2,10 @@ import rospy
 import tf2_ros
 import tf_conversions
 import numpy as np
-from numpy.typing import ArrayLike
+try:
+    from numpy.typing import ArrayLike
+except ModuleNotFoundError:
+    ArrayLike = np.ndarray
 from geometry_msgs.msg import TransformStamped, Transform
 from typing import Optional, Tuple, Union
 
@@ -45,7 +48,7 @@ class TfInterface:
         try:
             msg = self.tf_buffer.lookup_transform(parent_frame_id, child_frame_id, rospy.Time())
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            rospy.logwarn(f'Did not recieve the frame {child_frame_id} in {parent_frame_id}!')
+            rospy.logdebug(f'Did not recieve the frame {child_frame_id} in {parent_frame_id}!')
         return msg
 
     def get_tf(self, parent_frame_id: str, child_frame_id: str) -> Tuple[ArrayLike]:
