@@ -108,11 +108,11 @@ class TfInterface:
 
     @staticmethod
     def msg_to_pos_quat(msg: TransformStamped) -> Tuple[ArrayLike]:
-        return self.msg_to_pos(msg), self.msg_to_quat(msg)
+        return TfInterface.msg_to_pos(msg), TfInterface.msg_to_quat(msg)
 
     @staticmethod
     def msg_to_pos_eul(msg: TransformStamped) -> Tuple[ArrayLike]:
-        return self.msg_to_pos(msg), self.msg_to_eul(msg)
+        return TfInterface.msg_to_pos(msg), TfInterface.msg_to_eul(msg)
 
     @staticmethod
     def msg_to_matrix(msg: TransformStamped) -> ArrayLike:
