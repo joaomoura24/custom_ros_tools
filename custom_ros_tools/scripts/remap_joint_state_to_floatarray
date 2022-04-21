@@ -21,6 +21,8 @@ class Node:
         self.sub = None
         self.pub = rospy.Publisher('joint_states/floatarray', Float64MultiArray, queue_size=10)
         ToggleService('remap_joint_state_to_floatarray/toggle', self.start, self.stop)
+        if rospy.get_param('~start_on_init', False):
+            self.start()
 
     def start(self):
         if self.sub is None:
