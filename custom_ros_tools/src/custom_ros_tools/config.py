@@ -30,7 +30,7 @@ def load_config(path: str) -> dict:
 
 def load_configs(s: str) -> dict:
     """Load config from string."""
-    return yaml.load(f, Loader=yaml.FullLoader)
+    return yaml.load(s, Loader=yaml.FullLoader)
 
 def config_to_str(config: dict) -> str:
     """Convert a configuration to string."""
