@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import rospy
+from sensor_msgs.msg import JointState
+from custom_ros_tools.ros_comm import ToggleService
+
+class Node:
+
+    def __init__(self):
+        rospy.init_node('remap_joint_state_to_joint_state_node')
+        self.sub = None
+        self.pub = rospy.Publisher('joint_states/to', Float64MultiArray, queue_size=10)
+        ToggleService('remap_joint_state_to_joint_state/toggle', self.start, self.stop)
+        if rospy.get_param('~start_on_init', False):
+            self.start()
+
+    def start(self):
+        if self.sub is None:
+            self.sub = rospy.Subscriber('joint_states/from', JointState, self.pub.publish)
+            return True, "started remapper"
+        else:
+            return False, "tried to start remapper but it is already running"
+
+    def stop(self):
+        if self.sub is not None:
+            self.sub.unregister()
+            self.sub = None
+            return True, "stopped remapper"
+        else:
+            return False, "tried to stop remapper but it is not running"
+
+    def spin(self):
+        rospy.spin()
+
+def main():
+    Node().spin()
+
+if __name__ == "__main__":
+    main()
+
