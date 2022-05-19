@@ -1,4 +1,5 @@
 import rospy
+import time
 import tf2_ros
 import tf_conversions
 import numpy as np
@@ -54,6 +55,35 @@ class TfInterface:
     def get_tf(self, parent_frame_id: str, child_frame_id: str) -> Tuple[ArrayLike]:
         """Return position and orientation of child frame with respect to a parent frame."""
         msg = self.get_tf_msg(parent_frame_id, child_frame_id)
+        if msg is not None:
+            pos = self.msg_to_pos(msg)
+            orientation = self.msg_to_quat(msg)
+        else:
+            pos = None
+            orientation = None
+        return pos, orientation
+
+    def wait_for_tf_msg(self, parent_frame_id: str, child_frame_id: str, timeout: Optional[Union[float,None]]=None) -> Tuple[ArrayLike]:
+        r = rospy.Rate(100)
+        if timeout is not None:
+            timeout_t = time.time() + timeout
+            while True:
+                tf = self.get_tf_msg(parent_frame_id, child_frame_id)
+                if tf is not None:
+                    break
+                if time.time() >= timeout_t:
+                    raise rospy.exceptions.ROSException("timeout exceeded while waiting for tf %s in %s" % (child_frame_id, parent_frame_id))
+                r.sleep()
+        else:
+            while True:
+                tf = self.get_tf_msg(parent_frame_id, child_frame_id)
+                if tf is not None:
+                    break
+                r.sleep()
+        return tf
+
+    def wait_for_tf(self, parent_frame_id: str, child_frame_id: str, timeout: Optional[Union[float,None]]=None) -> Union[TransformStamped, None]:
+        msg = self.wait_for_tf_msg(parent_frame_id, child_frame_id, timeout=timeout)
         if msg is not None:
             pos = self.msg_to_pos(msg)
             orientation = self.msg_to_quat(msg)
