@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   tf2
   tf2_ros
+  keyboard
   )
 
 catkin_python_setup()
