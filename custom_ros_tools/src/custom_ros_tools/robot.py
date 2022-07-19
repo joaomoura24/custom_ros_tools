@@ -22,19 +22,19 @@ def resolve_joint_order(msg: JointState, joint_names: List[str], ns: str = '') -
             try:
                 out.position.append(msg.position[idx])
             except IndexError:
-                out.position.append(0.0)
+                pass
 
             # Append velocity
             try:
                 out.velocity.append(msg.velocity[idx])
             except IndexError:
-                out.velocity.append(0.0)
+                pass
 
             # Append effort
             try:
                 out.effort.append(msg.effort[idx])
             except IndexError:
-                out.effort.append(0.0)
+                pass
 
         else:
             # False -> append 0.0
