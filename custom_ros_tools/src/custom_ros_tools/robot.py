@@ -43,3 +43,9 @@ def resolve_joint_order(msg: JointState, joint_names: List[str], ns: str = '') -
             out.effort.append(0.0)
 
     return out
+
+def get_joint_state(topic='joint_states', timeout=None, joint_names=None, ns=''):
+    msg = rospy.wait_for_message(topic, JointState, timeout=timeout)
+    if joint_names:
+        msg = resolve_joint_order(msg, joint_names, ns=ns)
+    return msg
