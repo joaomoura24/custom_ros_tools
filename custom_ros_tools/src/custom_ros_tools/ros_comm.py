@@ -46,3 +46,9 @@ def get_srv_handler(
     except Exception as err:
         rospy.logerr(f"failed to retrieve service proxy: {str(err)}")
     return handler
+
+def get_srv_handlers(srvs, persistent=False):
+    return {
+        srv_name: get_srv_handler(srv_name, srv_type, persistent=persistent)
+        for srv_name, srv_type in srvs.items()
+    }
