@@ -37,12 +37,6 @@ def resolve_joint_order(msg: JointState, joint_names: List[str], ns: str = '') -
             except IndexError:
                 pass
 
-        else:
-            # False -> append 0.0
-            out.position.append(0.0)
-            out.velocity.append(0.0)
-            out.effort.append(0.0)
-
     return out
 
 def get_joint_state(topic='joint_states', timeout=None, joint_names=None, ns=''):
