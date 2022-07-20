@@ -44,3 +44,14 @@ def get_joint_state(topic='joint_states', timeout=None, joint_names=None, ns='')
     if joint_names:
         msg = resolve_joint_order(msg, joint_names, ns=ns)
     return msg
+
+class JointStatePublisher(rospy.Publisher):
+
+    def __init__(self, topic_name, joint_names, queue_size=1):
+        self._msg = JointState(name=joint_names)
+        super().__init__(topic_name, JointState, queue_size=queue_size)
+
+    def publish(self, q):
+        self._msg.position = q
+        self._msg.header.stamp = rospy.Time.now()
+        super().publish(self._msg)
