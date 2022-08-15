@@ -77,3 +77,9 @@ class JointStateSubscriber(rospy.Subscriber):
 
     def get(self):
         return self._msg
+
+    def get_position(self):
+        return self._msg.position
+
+    def get_velocity(self):
+        return self._msg.velocity
