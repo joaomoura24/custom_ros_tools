@@ -57,3 +57,23 @@ class JointStatePublisher(rospy.Publisher):
             self._msg.velocity = qd
         self._msg.header.stamp = rospy.Time.now()
         super().publish(self._msg)
+
+class JointStateSubscriber(rospy.Subscriber):
+
+    def __init__(self, topic_name, joint_names, ns='', callback=None):
+        self._msg = None
+        self._joint_names = joint_names
+        self._ns = ns
+        self._user_callback = callback
+        super().__init__(topic_name, JointState, self._callback)
+
+    def _callback(self, msg):
+        self._msg = resolve_joint_order(msg, self._joint_names, ns=self._ns)
+        if self._user_callback:
+            self._user_callback(self._msg)
+
+    def recieved(self):
+        return self._msg is not None
+
+    def get(self):
+        return self._msg
