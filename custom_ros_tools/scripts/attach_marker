@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+import rospy
+import tf_conversions
+import numpy as np
+from custom_ros_tools.tf import TfInterface
+from visualization_msgs.msg import Marker
+
+class Node:
+
+    def __init__(self):
+
+        # Setup ROS node
+        rospy.init_node('attach_marker_node', anonymous=True)
+        config = rospy.get_param('~config')
+        node_config = config['node']
+        self.hz = node_config.get('hz', 50)
+        self.pub = rospy.Publisher(node_config['topic_name'], Marker, queue_size=10)
+        self.tf = None
+        self.parent_frame_id = config.get('frame_id', 'map')
+        self.child_frame_id = None
+        self.handle_offset = self.null
+        if node_config.get('broadcast_offset', False):
+            self.handle_offset = self.broadcast_offset
+            self.child_frame_id = node_config['child_frame_id']
+            self.tf = TfInterface()
+
+        # Setup marker
+        self.marker = Marker()
+        self.marker.header.frame_id = self.parent_frame_id
+        self.marker.id = 0
+        self.marker.type = getattr(Marker, config['type'].upper())
+        self.marker.action = getattr(Marker, config.get('action', 'add').upper())
+        
+        position = config.get('position', [0.0]*3)
+        self.position = position
+        self.marker.pose.position.x = position[0]
+        self.marker.pose.position.y = position[1]
+        self.marker.pose.position.z = position[2]
+        
+        orientation = config.get('orientation', [0.0]*3)
+        if len(orientation) == 3:
+            if config.get('ori_in_deg', False):
+                orientation = np.deg2rad(orientation)
+            orientation = tf_conversions.transformations.quaternion_from_euler(*orientation)
+        elif len(orientation) == 4:
+            pass
+        else:
+            raise ValueError("expected orientatation to contain either 3 (RPY) or 4 (Quaternion) elements")
+        self.orientation = orientation
+        self.marker.pose.orientation.x = orientation[0]
+        self.marker.pose.orientation.y = orientation[1]
+        self.marker.pose.orientation.z = orientation[2]
+        self.marker.pose.orientation.w = orientation[3]        
+
+        rgba = config.get('rgba', [0., 0., 1., 0.9])
+        self.marker.color.r = rgba[0]
+        self.marker.color.g = rgba[1]
+        self.marker.color.b = rgba[2]
+        self.marker.color.a = rgba[3]
+
+        scale = config['scale']
+        self.marker.scale.x = scale[0]
+        self.marker.scale.y = scale[1]
+        self.marker.scale.z = scale[1]
+
+        if 'mesh_resource' in config:
+            self.marker.mesh_resource = config['mesh_resource']
+
+    def broadcast_offset(self):
+        self.tf.set_tf(self.parent_frame_id, self.child_frame_id, self.position, self.orientation)
+
+    def null(self):
+        pass
+
+    def spin(self):
+        rate = rospy.Rate(self.hz)
+        while not rospy.is_shutdown():        
+            self.marker.header.stamp = rospy.Time.now()
+            self.pub.publish(self.marker)
+            self.handle_offset()
+            rate.sleep()
+
+def main():
+    Node().spin()
+            
+if __name__ == '__main__':
+    main()
