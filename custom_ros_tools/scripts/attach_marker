@@ -30,13 +30,13 @@ class Node:
         self.marker.id = 0
         self.marker.type = getattr(Marker, config['type'].upper())
         self.marker.action = getattr(Marker, config.get('action', 'add').upper())
-        
+
         position = config.get('position', [0.0]*3)
         self.position = position
         self.marker.pose.position.x = position[0]
         self.marker.pose.position.y = position[1]
         self.marker.pose.position.z = position[2]
-        
+
         orientation = config.get('orientation', [0.0]*3)
         if len(orientation) == 3:
             if config.get('ori_in_deg', False):
@@ -50,7 +50,7 @@ class Node:
         self.marker.pose.orientation.x = orientation[0]
         self.marker.pose.orientation.y = orientation[1]
         self.marker.pose.orientation.z = orientation[2]
-        self.marker.pose.orientation.w = orientation[3]        
+        self.marker.pose.orientation.w = orientation[3]
 
         rgba = config.get('rgba', [0., 0., 1., 0.9])
         self.marker.color.r = rgba[0]
@@ -74,7 +74,7 @@ class Node:
 
     def spin(self):
         rate = rospy.Rate(self.hz)
-        while not rospy.is_shutdown():        
+        while not rospy.is_shutdown():
             self.marker.header.stamp = rospy.Time.now()
             self.pub.publish(self.marker)
             self.handle_offset()
@@ -82,6 +82,6 @@ class Node:
 
 def main():
     Node().spin()
-            
+
 if __name__ == '__main__':
     main()
