@@ -51,10 +51,13 @@ class JointStatePublisher(rospy.Publisher):
         self._msg = JointState(name=joint_names)
         super().__init__(topic_name, JointState, queue_size=queue_size)
 
-    def publish(self, q, qd=None):
-        self._msg.position = q
+    def publish(self, q=None, qd=None, eff=None):
+        if q is not None:
+            self._msg.position = q
         if qd is not None:
             self._msg.velocity = qd
+        if eff is not None:
+            self._msg.effort = eff
         self._msg.header.stamp = rospy.Time.now()
         super().publish(self._msg)
 
@@ -83,3 +86,6 @@ class JointStateSubscriber(rospy.Subscriber):
 
     def get_velocity(self):
         return self._msg.velocity
+
+    def get_effort(self):
+        return self._msg.effort
